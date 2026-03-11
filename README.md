@@ -10,7 +10,7 @@ Portfolio and admin panel (dashboard + "Project Ops") built with Next.js (App Ro
 - Firestore as the main data source
 
 ## Stats
-![Alt](https://repobeats.axiom.co/api/embed/dea08b428617027867d6865dca9c9664506643e8.svg "Repobeats analytics image")
+![Alt](https://repobeats.axiom.co/api/embed/2f4a1786744c6b61475f5028e2a073bc3da49e09.svg "Repobeats analytics image")
 
 ## Tech Stack
 
