@@ -8,6 +8,8 @@ import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { useRouteTransition } from "@/components/route-transition"
 import { useSiteSettings } from "@/components/site-settings-provider"
+import { useSafeUser } from "@/hooks/use-safe-user"
+import { UserButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs"
 
 export function V4Navbar() {
     const [scrolled, setScrolled] = useState(false)
@@ -15,6 +17,7 @@ export function V4Navbar() {
     const pathname = usePathname()
     const { loading, progress } = useRouteTransition()
     const { developerName } = useSiteSettings()
+    const user = useSafeUser()
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -83,6 +86,35 @@ export function V4Navbar() {
                                 Contact
                             </Link>
                         </Button>
+
+                        {user.hasProvider ? (
+                            <>
+                                <SignedOut>
+                                    <SignInButton mode="modal">
+                                        <Button size="sm" className="hidden md:inline-flex rounded-xl text-[10px] font-black uppercase tracking-widest px-6">
+                                            Login
+                                        </Button>
+                                    </SignInButton>
+                                </SignedOut>
+                                <SignedIn>
+                                    <div className="hidden md:flex items-center gap-2">
+                                        <UserButton
+                                            afterSignOutUrl="/"
+                                            appearance={{
+                                                elements: {
+                                                    avatarBox: "w-9 h-9",
+                                                },
+                                            }}
+                                        />
+                                    </div>
+                                </SignedIn>
+                            </>
+                        ) : (
+                            <Button asChild size="sm" className="hidden md:inline-flex rounded-xl text-[10px] font-black uppercase tracking-widest px-6">
+                                <Link href="/sign-in">Login</Link>
+                            </Button>
+                        )}
+
                         <Button
                             variant="ghost"
                             size="icon"
@@ -168,12 +200,41 @@ export function V4Navbar() {
                                         </Link>
                                     ))}
                                 </nav>
-                                <div className="mt-auto pt-6">
+                                <div className="mt-auto pt-6 space-y-3">
                                     <Button asChild className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest">
                                         <Link href="/contact" onClick={() => setMobileOpen(false)}>
                                             Contact
                                         </Link>
                                     </Button>
+
+                                    {user.hasProvider ? (
+                                        <>
+                                            <SignedOut>
+                                                <SignInButton mode="modal">
+                                                    <Button className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest" onClick={() => setMobileOpen(false)}>
+                                                        Login
+                                                    </Button>
+                                                </SignInButton>
+                                            </SignedOut>
+                                            <SignedIn>
+                                                <div className="flex items-center justify-between px-3 py-2 rounded-2xl bg-white/5">
+                                                    <div className="text-xs font-semibold text-white">Account</div>
+                                                    <UserButton
+                                                        afterSignOutUrl="/"
+                                                        appearance={{
+                                                            elements: { avatarBox: "w-10 h-10" },
+                                                        }}
+                                                    />
+                                                </div>
+                                            </SignedIn>
+                                        </>
+                                    ) : (
+                                        <Button asChild className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest">
+                                            <Link href="/sign-in" onClick={() => setMobileOpen(false)}>
+                                                Login
+                                            </Link>
+                                        </Button>
+                                    )}
                                 </div>
                             </div>
                         </motion.aside>
@@ -183,4 +244,3 @@ export function V4Navbar() {
         </header>
     )
 }
-
