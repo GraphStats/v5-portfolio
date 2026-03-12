@@ -8,18 +8,24 @@ import { useEffect, useState } from 'react'
 export function ClerkThemeProvider({ children }: { children: React.ReactNode }) {
   const { theme, systemTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
-  if (typeof window === 'undefined' && !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) {
+  // During static prerender or when the key is missing in env, skip Clerk entirely
+  if (!publishableKey) {
+    return <>{children}</>
+  }
+
+  if (typeof window === 'undefined' && !publishableKey) {
     return <>{children}</>
   }
 
   if (!mounted) {
     return (
-      <ClerkProvider>
+      <ClerkProvider publishableKey={publishableKey}>
         {children}
       </ClerkProvider>
     )
@@ -30,6 +36,7 @@ export function ClerkThemeProvider({ children }: { children: React.ReactNode }) 
 
   return (
     <ClerkProvider
+      publishableKey={publishableKey}
       appearance={{
         baseTheme: isDark ? dark : undefined,
         variables: {
