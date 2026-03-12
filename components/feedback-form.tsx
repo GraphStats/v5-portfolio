@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import Script from "next/script"
 
 import { submitFeedback } from "@/lib/actions"
+import { publicEnv } from "@/lib/env"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -31,7 +32,7 @@ declare global {
   }
 }
 
-const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "0x4AAAAAACcfmOPbbmFHrfYq"
+const TURNSTILE_SITE_KEY = publicEnv.turnstileSiteKey
 
 export function FeedbackForm() {
   const [isLoading, setIsLoading] = useState(false)
@@ -43,6 +44,7 @@ export function FeedbackForm() {
   const [isScriptReady, setIsScriptReady] = useState(false)
   const [isClient, setIsClient] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
+  const isTurnstileConfigured = Boolean(TURNSTILE_SITE_KEY)
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -96,6 +98,7 @@ export function FeedbackForm() {
 
   useEffect(() => {
     if (!showTurnstile || !isScriptReady || !containerRef.current || !window.turnstile || widgetId) return
+    if (!isTurnstileConfigured) return
 
     const id = window.turnstile.render(containerRef.current, {
       sitekey: TURNSTILE_SITE_KEY,
@@ -163,6 +166,13 @@ export function FeedbackForm() {
         document.body
       )}
 
+      {!isTurnstileConfigured && (
+        <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm text-amber-100 mb-4">
+          Cloudflare Turnstile is not configured. Set NEXT_PUBLIC_TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY in your
+          environment to enable verified submissions.
+        </div>
+      )}
+
       <form id="feedback-form" onSubmit={onSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="space-y-2">
@@ -225,7 +235,7 @@ export function FeedbackForm() {
           />
         </div>
 
-        <Button type="submit" disabled={isLoading} className="w-full h-12 rounded-xl font-bold">
+        <Button type="submit" disabled={isLoading || !isTurnstileConfigured} className="w-full h-12 rounded-xl font-bold">
           {isLoading ? (
             <>
               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -242,4 +252,3 @@ export function FeedbackForm() {
     </>
   )
 }
-

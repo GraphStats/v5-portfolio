@@ -13,6 +13,9 @@
 # production
 /build
 
+# netlify build artifacts (can contain env-injected bundles)
+.netlify/
+
 # misc
 .DS_Store
 *.pem

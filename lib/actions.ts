@@ -6,6 +6,7 @@ import { revalidatePath, revalidateTag, unstable_cache } from "next/cache"
 import { auth as clerkAuth, currentUser } from "@clerk/nextjs/server"
 import type { Project, News, NewsComment, Feedback, SearchItem } from "@/lib/types"
 import { normalizeDeveloperName, DEFAULT_DEVELOPER_NAME } from "@/lib/site-settings"
+import { serverEnv } from "@/lib/env"
 
 const SETTINGS_GENERAL_TAG = "settings-general"
 const HOME_PAGE_TAG = "home-page-data"
@@ -599,7 +600,7 @@ export async function deleteConversation(id: string) {
 
 // Feedback Actions
 async function verifyTurnstileToken(token: string) {
-  const secret = process.env.TURNSTILE_SECRET_KEY
+  const secret = serverEnv.turnstileSecret
   if (!secret) {
     console.error("TURNSTILE_SECRET_KEY is missing")
     return false
@@ -1136,4 +1137,3 @@ export async function deleteComment(commentId: string, newsId: string) {
     return { success: false, error: error.message }
   }
 }
-
