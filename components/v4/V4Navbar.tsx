@@ -10,6 +10,7 @@ import { useRouteTransition } from "@/components/route-transition"
 import { useSiteSettings } from "@/components/site-settings-provider"
 import { useSafeUser } from "@/hooks/use-safe-user"
 import { UserButton, SignInButton, SignedIn, SignedOut } from "@clerk/nextjs"
+import { VersionSelector } from "@/components/version-selector"
 
 export function V4Navbar() {
     const [scrolled, setScrolled] = useState(false)
@@ -81,6 +82,9 @@ export function V4Navbar() {
                     </nav>
 
                     <div className="flex items-center gap-3">
+                        <div className="hidden md:flex">
+                            <VersionSelector />
+                        </div>
                         <Button asChild variant="outline" size="sm" className="hidden md:flex rounded-xl glass border-white/5 text-[10px] font-black uppercase tracking-widest px-6 hover:bg-primary hover:text-primary-foreground transition-all">
                             <Link href="/contact">
                                 Contact
@@ -201,6 +205,7 @@ export function V4Navbar() {
                                     ))}
                                 </nav>
                                 <div className="mt-auto pt-6 space-y-3">
+                                    <VersionSelector />
                                     <Button asChild className="w-full rounded-2xl text-[10px] font-black uppercase tracking-widest">
                                         <Link href="/contact" onClick={() => setMobileOpen(false)}>
                                             Contact

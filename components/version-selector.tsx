@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
     DropdownMenu,
@@ -15,7 +14,7 @@ import { Check, Code, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouteTransition } from "@/components/route-transition"
 
-type Version = "v1" | "v2" | "v3" | "v4"
+type Version = "v1" | "v2" | "v3" | "v4" | "v5"
 
 const VERSIONS: Array<{
     id: Version
@@ -23,43 +22,20 @@ const VERSIONS: Array<{
     available: boolean
     description: string
     icon: typeof Code
+    href: string
 }> = [
-    {
-        id: "v1",
-        label: "Version 1",
-        available: true,
-        description: "Static HTML version",
-        icon: Code,
-    },
-    {
-        id: "v2",
-        label: "Version 2",
-        available: true,
-        description: "Full visual redesign, new technology",
-        icon: Code,
-    },
-    {
-        id: "v3",
-        label: "Version 3",
-        available: true,
-        description: "v3, new interface",
-        icon: Code,
-    },
-    {
-        id: "v4",
-        label: "Version 4",
-        available: true,
-        description: "Current version",
-        icon: Sparkles,
-    },
+    { id: "v5", label: "Version 5", available: true, description: "Current", icon: Sparkles, href: "/" },
+    { id: "v4", label: "Version 4", available: true, description: "v4.drayko.xyz", icon: Code, href: "https://v4.drayko.xyz" },
+    { id: "v3", label: "Version 3", available: true, description: "v3.drayko.xyz", icon: Code, href: "https://v3.drayko.xyz" },
+    { id: "v2", label: "Version 2", available: true, description: "v2.drayko.xyz", icon: Code, href: "https://v2.drayko.xyz" },
+    { id: "v1", label: "Version 1", available: true, description: "v1.drayko.xyz", icon: Code, href: "https://v1.drayko.xyz" },
 ]
 
 const VERSION_STORAGE_KEY = "portfolio-version"
 
 export function VersionSelector() {
-    const pathname = usePathname()
     const { startTransition } = useRouteTransition()
-    const [currentVersion, setCurrentVersion] = useState<Version>("v4")
+    const [currentVersion, setCurrentVersion] = useState<Version>("v5")
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
@@ -77,16 +53,17 @@ export function VersionSelector() {
     useEffect(() => {
         if (!mounted) return
 
-        if (pathname === "/v1.html" || pathname.startsWith("/v1")) {
-            setCurrentVersion("v1")
-        } else if (pathname.startsWith("/v2")) {
-            setCurrentVersion("v2")
-        } else if (pathname.startsWith("/v3")) {
-            setCurrentVersion("v3")
-        } else {
-            setCurrentVersion("v4")
+        try {
+            const host = window.location.hostname
+            if (host.includes("v4.")) setCurrentVersion("v4")
+            else if (host.includes("v3.")) setCurrentVersion("v3")
+            else if (host.includes("v2.")) setCurrentVersion("v2")
+            else if (host.includes("v1.")) setCurrentVersion("v1")
+            else setCurrentVersion("v5")
+        } catch {
+            setCurrentVersion("v5")
         }
-    }, [pathname, mounted])
+    }, [mounted])
 
     const handleVersionChange = (version: Version) => {
         if (!VERSIONS.find(v => v.id === version)?.available) {
@@ -100,19 +77,12 @@ export function VersionSelector() {
             console.error("Error saving to localStorage:", error)
         }
 
-        switch (version) {
-            case "v1":
-                startTransition("/v1.html")
-                break
-            case "v2":
-                window.location.assign("https://v2.drayko.xyz")
-                break
-            case "v3":
-                window.location.assign("https://v3.drayko.xyz")
-                break
-            case "v4":
-                startTransition("/")
-                break
+        const target = VERSIONS.find(v => v.id === version)?.href
+        if (!target) return
+        if (version === "v5") {
+            startTransition(target)
+        } else {
+            window.location.assign(target)
         }
     }
 
