@@ -1,8 +1,6 @@
 import { Suspense, type ReactNode } from "react"
 import type { Metadata } from "next"
 import { Inter, Outfit } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import Script from "next/script"
 import dynamic from "next/dynamic"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -79,8 +77,6 @@ export default async function RootLayout({
                 </div>
               {isProd && (
                 <>
-                  <Analytics />
-                  <SpeedInsights />
                   <Script
                     id="umami"
                     strategy="lazyOnload"
