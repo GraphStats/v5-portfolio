@@ -60,11 +60,11 @@ const nextConfig = {
           "default-src 'self';",
           "img-src 'self' https: data: blob:;",
           "media-src 'self' https: data:;",
-          "script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://*.clerk.accounts.dev https://*.clerk.com;",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://challenges.cloudflare.com https://*.clerk.accounts.dev https://*.clerk.com https://clerk.drayko.xyz;",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
           "font-src 'self' https://fonts.gstatic.com data:;",
           "connect-src 'self' https: wss:;",
-          "frame-src 'self' https://challenges.cloudflare.com https://*.clerk.com https://*.clerk.accounts.dev;",
+          "frame-src 'self' https://challenges.cloudflare.com https://*.clerk.com https://*.clerk.accounts.dev https://clerk.drayko.xyz;",
         ].join(" "),
       },
     ]
@@ -77,6 +77,7 @@ const nextConfig = {
     ]
   },
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
