@@ -63,7 +63,7 @@ const nextConfig = {
           "script-src 'self' 'unsafe-inline' 'unsafe-eval' data: https://challenges.cloudflare.com https://*.clerk.accounts.dev https://*.clerk.com https://clerk.drayko.xyz https://cloud.umami.is https://www.googletagmanager.com https://www.statcounter.com;",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;",
           "font-src 'self' https://fonts.gstatic.com data:;",
-          "connect-src 'self' https: wss: https://cloud.umami.is https://www.googletagmanager.com https://www.google-analytics.com https://stats.g.doubleclick.net;",
+          "connect-src 'self' https: wss: https://cloud.umami.is https://www.googletagmanager.com https://www.google-analytics.com https://stats.g.doubleclick.net https://clerk.drayko.xyz;",
           "frame-src 'self' https://challenges.cloudflare.com https://*.clerk.com https://*.clerk.accounts.dev https://clerk.drayko.xyz;",
           "worker-src 'self' blob: https://*.clerk.com https://*.clerk.accounts.dev https://clerk.drayko.xyz;",
         ].join(" "),
