@@ -4,8 +4,9 @@ import { useState } from "react"
 import { Heart, MessageCircle, Share2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { toggleLikeNews } from "@/lib/actions"
-import { useUser, SignInButton } from "@clerk/nextjs"
+import { SignInButton } from "@clerk/nextjs"
 import { toast } from "sonner"
+import { useSafeUser } from "@/hooks/use-safe-user"
 
 interface NewsInteractionProps {
     newsId: string
@@ -14,7 +15,7 @@ interface NewsInteractionProps {
 }
 
 export function NewsInteraction({ newsId, initialLikes, commentCount }: NewsInteractionProps) {
-    const { user, isLoaded } = useUser()
+    const { user, isLoaded } = useSafeUser()
     const [likes, setLikes] = useState(initialLikes)
     const [isLiking, setIsLiking] = useState(false)
 

@@ -11,9 +11,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import Image from "next/image"
 import Link from "next/link"
 import { useEffect, useMemo, useState } from "react"
-import { useUser, SignInButton } from "@clerk/nextjs"
+import { SignInButton } from "@clerk/nextjs"
 import { HorizontalScrollSection } from "@/components/ui/HorizontalScrollSection"
 import { cn } from "@/lib/utils"
+import { useSafeUser } from "@/hooks/use-safe-user"
 
 interface V4ProjectsProps {
     projects: Project[]
@@ -38,7 +39,7 @@ export function V4Projects({ projects, incidentProjectMarkers = [] }: V4Projects
     const [sortBy, setSortBy] = useState<string>("newest")
     const [favorites, setFavorites] = useState<string[]>([])
     const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
-    const { user } = useUser()
+    const { user, hasProvider } = useSafeUser()
     const isSignedIn = !!user
 
     const normalizedQuery = query.trim().toLowerCase()
@@ -215,6 +216,7 @@ export function V4Projects({ projects, incidentProjectMarkers = [] }: V4Projects
                             incidentProjectMarkers={incidentProjectMarkers}
                             onToggleFavorite={toggleFavorite}
                             onOpenQuickView={setSelectedProjectId}
+                            hasAuthProvider={hasProvider}
                         />
                     ))
                 ) : (
@@ -242,6 +244,7 @@ function ProjectCard({
     incidentProjectMarkers,
     onToggleFavorite,
     onOpenQuickView,
+    hasAuthProvider,
 }: {
     project: Project
     index: number
@@ -250,6 +253,7 @@ function ProjectCard({
     incidentProjectMarkers: string[]
     onToggleFavorite: (projectId: string) => void
     onOpenQuickView: (projectId: string) => void
+    hasAuthProvider: boolean
 }) {
     const isLocked = project.requires_auth && !isSignedIn
     const hasIncidentIssue = doesProjectMatchIncident(project, incidentProjectMarkers)
@@ -300,9 +304,15 @@ function ProjectCard({
                 {isLocked && (
                     <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm rounded-xl">
                         <Lock className="w-8 h-8 text-white/50 mb-4" />
-                        <SignInButton mode="modal">
-                            <Button size="sm" className="rounded-xl bg-white text-black font-black uppercase tracking-widest text-[9px]">Unlock</Button>
-                        </SignInButton>
+                        {hasAuthProvider ? (
+                            <SignInButton mode="modal">
+                                <Button size="sm" className="rounded-xl bg-white text-black font-black uppercase tracking-widest text-[9px]">Unlock</Button>
+                            </SignInButton>
+                        ) : (
+                            <Button size="sm" className="rounded-xl bg-white text-black font-black uppercase tracking-widest text-[9px]" disabled>
+                                Sign-in unavailable
+                            </Button>
+                        )}
                     </div>
                 )}
 

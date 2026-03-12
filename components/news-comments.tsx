@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useUser, SignInButton } from "@clerk/nextjs"
+import { SignInButton } from "@clerk/nextjs"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { addComment, deleteComment, toggleCommentLike } from "@/lib/actions"
@@ -11,6 +11,7 @@ import { ArrowUpDown, Heart, MessageCircle, Send, Trash2, User } from "lucide-re
 import { formatDistanceToNow } from "date-fns"
 import { enUS } from "date-fns/locale"
 import Image from "next/image"
+import { useSafeUser } from "@/hooks/use-safe-user"
 
 interface NewsCommentsProps {
     newsId: string
@@ -18,7 +19,7 @@ interface NewsCommentsProps {
 }
 
 export function NewsComments({ newsId, initialComments }: NewsCommentsProps) {
-    const { user, isLoaded } = useUser()
+    const { user, isLoaded, hasProvider } = useSafeUser()
     const [comments, setComments] = useState(initialComments)
     const [content, setContent] = useState("")
     const [honeypot, setHoneypot] = useState("")
@@ -148,11 +149,21 @@ export function NewsComments({ newsId, initialComments }: NewsCommentsProps) {
                     <div className="p-10 rounded-[2rem] border border-dashed border-white/10 bg-white/[0.01] text-center space-y-6">
                         <div className="space-y-2">
                             <p className="text-lg font-bold uppercase italic tracking-tight">Join the conversation</p>
-                            <p className="text-muted-foreground text-sm font-medium">Sign in to share your thoughts.</p>
+                            <p className="text-muted-foreground text-sm font-medium">
+                                Sign in to share your thoughts.
+                            </p>
                         </div>
-                        <SignInButton mode="modal">
-                            <Button className="rounded-full h-12 px-8 bg-white text-black font-black uppercase tracking-widest text-[10px] hover:bg-white/90">Sign in</Button>
-                        </SignInButton>
+                        {hasProvider ? (
+                            <SignInButton mode="modal">
+                                <Button className="rounded-full h-12 px-8 bg-white text-black font-black uppercase tracking-widest text-[10px] hover:bg-white/90">
+                                    Sign in
+                                </Button>
+                            </SignInButton>
+                        ) : (
+                            <Button className="rounded-full h-12 px-8 bg-white text-black font-black uppercase tracking-widest text-[10px]" disabled>
+                                Sign-in unavailable
+                            </Button>
+                        )}
                     </div>
                 )}
 
