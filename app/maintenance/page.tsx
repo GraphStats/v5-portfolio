@@ -41,7 +41,7 @@ export default async function MaintenancePage() {
           <div className="space-y-3">
             <p className="text-sm uppercase tracking-[0.24em] text-muted-foreground font-bold">Portfolio</p>
             <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight uppercase">
-              {developerName} • V5 en cours d'ajustement
+              Maintenance en cours sur drayko.xyz
             </h1>
           </div>
 
@@ -75,7 +75,7 @@ export default async function MaintenancePage() {
 
           <div className="flex flex-wrap gap-3 pt-2">
             <Link
-              href="/status"
+              href="https://status.drayko.xyz/"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/15 glass hover:border-primary/60 transition-colors text-sm font-semibold"
             >
               Consulter le statut
