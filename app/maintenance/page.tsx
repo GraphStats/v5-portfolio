@@ -34,18 +34,15 @@ export default async function MaintenancePage() {
       <main className="relative z-10 max-w-5xl mx-auto px-6 py-16 md:py-24">
         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full v4-glass border-white/10 text-[10px] font-black uppercase tracking-[0.28em] text-primary">
           <span className="h-2 w-2 rounded-full bg-amber-400 animate-pulse" />
-          Maintenance v4
+          Maintenance v5
         </div>
 
         <div className="mt-8 space-y-6">
           <div className="space-y-3">
             <p className="text-sm uppercase tracking-[0.24em] text-muted-foreground font-bold">Portfolio</p>
             <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-tight uppercase">
-              {developerName} • V4 en cours d'ajustement
+              {developerName} • V5 en cours d'ajustement
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-              {displayMessage}
-            </p>
           </div>
 
           <div className="v4-glass border-white/10 rounded-[2.25rem] p-8 md:p-10 space-y-8 shadow-2xl shadow-black/40">
@@ -56,8 +53,7 @@ export default async function MaintenancePage() {
               <div className="space-y-2">
                 <p className="text-2xl font-black tracking-tight">Mise à jour système en cours</p>
                 <p className="text-muted-foreground leading-relaxed">
-                  Nous appliquons la nouvelle direction artistique et les derniers correctifs de la version 4.
-                  Cette page reflète désormais le nouveau design pour éviter toute confusion avec l'ancienne V2.
+                  {displayMessage}
                 </p>
               </div>
             </div>
@@ -75,21 +71,6 @@ export default async function MaintenancePage() {
                 />
               </div>
             </div>
-
-            <div className="grid gap-4 md:grid-cols-3 text-sm font-semibold uppercase tracking-[0.14em]">
-              <div className="v4-card border-white/10 p-4 flex items-center gap-3">
-                <ShieldCheck className="h-5 w-5 text-emerald-400" />
-                <span>Sécurité prioritaire</span>
-              </div>
-              <div className="v4-card border-white/10 p-4 flex items-center gap-3">
-                <Sparkles className="h-5 w-5 text-blue-300" />
-                <span>Nouvelle DA appliquée</span>
-              </div>
-              <div className="v4-card border-white/10 p-4 flex items-center gap-3">
-                <ArrowRight className="h-5 w-5 text-cyan-300" />
-                <span>Retour imminent</span>
-              </div>
-            </div>
           </div>
 
           <div className="flex flex-wrap gap-3 pt-2">
@@ -99,13 +80,6 @@ export default async function MaintenancePage() {
             >
               Consulter le statut
               <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground hover:brightness-110 transition-colors text-sm font-semibold"
-            >
-              Retour à l'accueil
-              <ArrowLeft className="h-4 w-4" />
             </Link>
           </div>
         </div>
